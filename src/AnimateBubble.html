@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        #canvas {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas'></canvas>
+    <script>
+        const el = document.querySelector('#canvas')
+        const ctx = el.getContext('2d')
+        const state = {
+            mouse: {
+                x: 0,
+                y: 0
+            },
+            ww: el.offsetWidth,
+            hh: el.offsetHeight
+        }
+        function genRadomColor() {
+            let n = () => Math.round(Math.random() * 255)
+            return `rgb(${n()}, ${n()}, ${n()})`
+        }
+        class Particle{
+            constructor() {
+                Object.assign(this, {
+                    r: Math.random() * 10 + 2,
+                    x: Math.random() * state.ww,
+                    y: Math.random() * state.hh,
+                    xs: Math.random() * -2 + 1,
+                    ys: Math.random() * -2 + 1,
+                    color: genRadomColor()
+                })
+            }
+            move() {
+                this.x += this.xs
+                this.y += this.ys
+                if (this.x > state.ww || this.x < 0) this.xs = -this.xs
+                if (this.y > state.hh || this.y < 0) this.ys = -this.ys
+            }
+            zoom() {
+                let { x, y } = state.mouse
+                let d = Math.sqrt((x - this.x)**2 + (y - this.y)**2)
+                if(d < 100) {
+                    this.or = (100 - d) + this.r
+                } else {
+                    this.or = null
+                }
+            }
+            render() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.or || this.r, 0, 2 * Math.PI);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath()
+            }
+        }
+        let particles = []
+        function genParticles() {
+            particles = []
+            for (let i = 0; i < 1000; i++) {
+                particles.push(new Particle())
+            }
+        }
+        function waterMarker() {
+            ctx.beginPath()
+            ctx.fillStyle = '#aaa'
+            ctx.font="14px Arial";
+            ctx.fillText('Bougie@2018-06-15', 5, 17)
+            ctx.closePath()
+        }
+        function draw() {
+            ctx.clearRect(0, 0, state.ww, state.hh);
+            particles.forEach(v => {
+                v.move()
+                v.zoom()
+                v.render()
+            })
+            waterMarker()
+            requestAnimationFrame(draw)
+        }
+
+        function mouseMove(e) {
+            state.mouse.x = e.x
+            state.mouse.y = e.y
+        }
+        
+        function resize() {
+            let { offsetWidth, offsetHeight } = el
+            state.ww = offsetWidth
+            state.hh = offsetHeight
+            el.width = offsetWidth
+            el.height = offsetHeight
+            genParticles()
+            cancelAnimationFrame(draw)
+            ctx.clearRect(0, 0, state.ww, state.hh);
+            draw()
+        }
+        resize()
+
+        window.addEventListener('resize', resize)
+        el.addEventListener('mousemove', mouseMove)
+    </script>
+</body>
+
+</html>

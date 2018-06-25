@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas画廊</title>
+    <script src="./asset/tinyJquery.min.js"></script>
+    <link rel="stylesheet" href="./asset/style.css">
+</head>
+<body>
+    <div class="list">
+        
+    </div>
+    <iframe class="content"></iframe>
+    
+    <script>
+        const list = [{
+            name: '多啦A梦',
+            src: './src/Doraemon.html'
+        }, {
+            name: '运动的气泡',
+            src: './src/AnimateBubble.html'
+        }, {
+            name: '简陋的星空',
+            src: './src/StarSky.html'
+        }]
+        function item({name, src}) {
+            return `
+                <div class='item' data-src="${src}">
+                    <div class="marker"></div>
+                    <div class="name">${name}</div>
+                </div>
+            `
+        }
+        let html = ''
+        list.forEach(v => {
+            html += item(v)
+        })
+        $('.list').html(html)
+        $('.item').eq(0).ac('item-active')
+        $('.content').attr('src', $('.item').eq(0).data('src'))
+        $('.item').on('click', function() {
+            $('.item').rc('item-active')
+            $(this).ac('item-active')
+            $('.content').attr('src', $(this).data('src'))
+        })
+    </script>
+</body>
+</html>

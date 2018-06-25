@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body{
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id='canvas'></canvas>
+    <script>
+        let el = document.querySelector('#canvas')
+        let ctx = el.getContext('2d')
+        const state = {
+            ww: 0,
+            hh: 0,
+            num: 200,
+            center: [],
+            size: [1, 4]
+        }
+        class Star{
+            constructor() {
+                let {size, ww, hh} = state
+                this.r = Math.random() * (size[1] - size[0]) + size[0]
+                let max = Math.max(ww, hh)
+                this.x = (max * Math.random() - max * Math.random())/2
+                this.y = (max * Math.random() - max * Math.random())/2
+                this.color = brgba('#FFFFFF', this.r / size[1])
+                // this.flash()
+            }
+            flash() {
+                let recTime = Math.random() * 1000
+                setInterval(() => {
+                    let oMin = 0, oMax = this.r / state.size[1], oNow = this.r / state.size[1], interval = -0.05
+                    let flashAnim = () => {
+                        if(oNow <= oMin) {
+                            interval = 0.05
+                        }
+                        oNow += interval
+                        this.color = brgba('#FFFFFF', oNow)
+                        if(oNow >= oMax) {
+                            cancelAnimationFrame(flashAnim)
+                        }
+                        requestAnimationFrame(flashAnim)
+                    }
+                    flashAnim()
+                }, Math.random() * 20000 + 5000)
+            }
+            trail() {
+                let {x, y} = this
+                let r = Math.sqrt(x ** 2 + y ** 2)
+                let sa = Math.atan(Math.abs(y/x)), ep = []
+                if(x >= 0 && y <= 0) {
+                    sa = Math.PI * 2 - sa
+                } else if(x <= 0 && y <= 0) {
+                    sa = Math.PI + sa
+                } else if(x <= 0 && y >= 0) {
+                    sa = Math.PI - sa
+                }
+                let ea = sa - Math.PI/6
+                ctx.beginPath()
+                ctx.strokeStyle = this.color
+                ctx.arc(0, 0, r, ea, sa)
+                ctx.lineWidth = this.r/2
+                ctx.stroke()
+                ctx.closePath()
+            }
+            render() {
+                let {x, y, r, color} = this
+                ctx.beginPath()
+                ctx.fillStyle = this.color
+                ctx.arc(x, y, r, 0, 2 * Math.PI, true)
+                ctx.fill()
+                ctx.closePath()
+                this.trail()
+            }
+        }
+        function render() {
+            stars.forEach(v => {
+                v.render()
+            })
+        }
+        function waterMarker() {
+            ctx.beginPath()
+            ctx.fillStyle = '#aaa'
+            ctx.font="14px Arial";
+            ctx.fillText('Bougie@2018-06-25', 5, 17)
+            ctx.closePath()
+        }
+        function brgba(hex, opacity) {
+            // if( ! /#?\d+/g.test(hex) ) return hex; //如果是“red”格式的颜色值，则不转换。//正则错误，参考后面的PS内容
+            var h = hex.charAt(0) == "#" ? hex.substring(1) : hex,
+                r = parseInt(h.substring(0,2),16),
+                g = parseInt(h.substring(2,4),16),
+                b = parseInt(h.substring(4,6),16),
+                a = opacity;
+            return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+        }
+        let stars = []
+        function resize() {
+            let {innerWidth, innerHeight} = window
+            state.ww = innerWidth
+            state.hh = innerHeight
+            state.center = [innerWidth/2, innerHeight/2]
+            el.width = innerWidth
+            el.height = innerHeight
+            stars = []
+            for(let i = 0; i < state.num; i++) {
+                stars.push(new Star())
+            }
+            cancelAnimationFrame(rotate)
+            let background = document.createElement('img')
+            background.setAttribute('src', '../asset/stars_back.jpg')
+            let rDeg = 0
+            function rotate() {
+                ctx.clearRect(0, 0, innerWidth, innerHeight)
+                ctx.drawImage(background, 0, 0, innerWidth, innerHeight)
+                let deg = Math.PI / 180
+                rDeg += deg * 0.2
+                ctx.save()
+                let [cx, cy] = state.center
+                ctx.translate(cx, cy)
+                ctx.rotate(rDeg)
+                render()
+                ctx.restore()
+                requestAnimationFrame(rotate)
+            }
+            rotate()
+        }
+        resize()
+        window.addEventListener('resize', resize)
+    </script>
+</body>
+</html>

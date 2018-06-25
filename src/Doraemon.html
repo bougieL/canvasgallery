@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        canvas {
+            width: 800px;
+            height: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        let el = document.querySelector('#canvas')
+        let ctx = el.getContext("2d")
+        ctx.strokeStyle = '#2F2725'
+        ctx.lineWidth = 3
+        function face() {
+            ctx.beginPath();
+            // ctx.arc(400, 240, 230, 0, 2 * Math.PI)
+            ctx.moveTo(240, 400);
+            ctx.quadraticCurveTo(100, 220, 220, 80)
+            ctx.bezierCurveTo(308, -20, 492, -20, 580, 80)
+            ctx.quadraticCurveTo(700, 220, 560, 400)
+            // ctx.bezierCurveTo(-110, -125, 910, -125, 560, 400)
+            ctx.fillStyle = '#00A0E8'
+            ctx.fill()
+            ctx.stroke()
+            ctx.clearRect(0, 400, 800, 800)
+            ctx.beginPath();
+            ctx.moveTo(245, 400);
+            ctx.bezierCurveTo(0, -5, 800, -5, 555, 400)
+            ctx.fillStyle = '#FFF'
+            ctx.fill()
+            ctx.stroke();
+        }
+        function eye() {
+            ParamEllipse(ctx, 350, 85, 50, 54)
+            ctx.fillStyle = '#FFF'
+            ctx.fill()
+            ctx.stroke()
+            ParamEllipse(ctx, 450, 85, 50, 54)
+            ctx.fillStyle = '#FFF'
+            ctx.fill()
+            ctx.stroke()
+            ctx.beginPath()
+            ctx.moveTo(360, 95)
+            ctx.quadraticCurveTo(375, 60, 390, 95)
+            ctx.moveTo(440, 95)
+            ctx.quadraticCurveTo(425, 60, 410, 95)
+            ctx.stroke()
+            ctx.closePath()
+        }
+        function nose() {
+            ctx.beginPath()
+            ctx.arc(400, 138, 26, 0, 2 * Math.PI)
+            ctx.fillStyle = '#E2012B'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.arc(395, 130, 8, 0, 2 * Math.PI)
+            ctx.fillStyle = '#fff'
+            ctx.fill()
+            ctx.closePath()
+        }
+        function mouth() {
+            ctx.beginPath()
+            ctx.moveTo(400, 164)
+            ctx.lineTo(400, 352)
+            ctx.moveTo(220, 264)
+            ctx.quadraticCurveTo(400, 440, 580, 264)
+            ctx.moveTo(360, 200)
+            ctx.lineTo(240, 170)
+
+            ctx.moveTo(440, 200)
+            ctx.lineTo(560, 170)
+
+            ctx.moveTo(356, 240)
+            ctx.lineTo(210, 235)
+            
+            ctx.moveTo(444, 240)
+            ctx.lineTo(590, 235)
+            
+            ctx.moveTo(360, 280)
+            ctx.lineTo(220, 300)
+            
+            ctx.moveTo(440, 280)
+            ctx.lineTo(580, 300)
+
+            ctx.stroke()
+            ctx.closePath()
+        }
+
+        function necklace() {
+            ctx.beginPath()
+            ctx.lineJoin = "round"
+            ctx.moveTo(235, 400)
+            ctx.quadraticCurveTo(400, 410, 565, 400)
+            ctx.quadraticCurveTo(570, 410, 565, 420)
+            ctx.quadraticCurveTo(400, 438, 235, 420)
+            ctx.quadraticCurveTo(230, 410, 235, 400)
+            ctx.fillStyle = '#E0022C'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.arc(400, 446, 36, 0, 2 * Math.PI)
+            ctx.fillStyle = '#FDE53B'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.moveTo(362, 435)
+            ctx.quadraticCurveTo(400, 430, 438, 435)
+            ctx.quadraticCurveTo(442, 438, 438, 441)
+            ctx.quadraticCurveTo(400, 436, 362, 441)
+            ctx.quadraticCurveTo(358, 438, 362, 435)
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.arc(400, 456, 7, 0, 2 * Math.PI)
+            ctx.fillStyle = '#836A59'
+            ctx.moveTo(400, 463)
+            ctx.lineTo(400, 482)
+            ctx.fill()
+            ctx.stroke()
+        }
+        function waterMarker() {
+            ctx.beginPath()
+            ctx.fillStyle = '#aaa'
+            ctx.font="14px Arial";
+            ctx.fillText('Bougie@2018-06-18', 5, 17)
+            ctx.closePath()
+        }
+        function arm() {
+            ctx.beginPath()
+            ctx.moveTo(235, 420)
+            ctx.quadraticCurveTo(190, 460, 170, 520)
+            ctx.lineTo(400, 650)
+            ctx.lineTo(630, 520)
+            ctx.quadraticCurveTo(610, 460, 565, 420)
+            ctx.fillStyle='#00A0E8'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.arc(190, 550, 50, 0, 2 * Math.PI)
+            ctx.moveTo(620, 550)
+            ctx.arc(610, 550, 50, 0, 2 * Math.PI)
+            ctx.stroke()
+            ctx.fillStyle = '#fff'
+            ctx.fill()
+            ctx.closePath()
+        }
+        function body() {
+            ctx.beginPath()
+            ctx.moveTo(235, 450)
+            ctx.quadraticCurveTo(230, 570, 260, 690)
+            ctx.quadraticCurveTo(330, 700, 400, 690)
+            ctx.quadraticCurveTo(470, 700, 540, 690)
+            ctx.quadraticCurveTo(570, 570, 565, 450)
+            ctx.fillStyle='#00A0E8'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.moveTo(385, 670)
+            ctx.lineTo(415, 670)
+            ctx.moveTo(400, 670)
+            ctx.lineTo(400, 740)
+            ctx.stroke()
+            ctx.closePath()
+        }
+        function foot() {
+            ctx.beginPath()
+            ctx.moveTo(260, 690)
+            ctx.bezierCurveTo(200, 690, 170, 800, 400, 740)
+            ctx.bezierCurveTo(630, 800, 600, 690, 540, 690)
+            ctx.fillStyle='#fff'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+        }
+        function bag() {
+            ctx.beginPath()
+            // ctx.moveTo(400, 600)
+            // ctx.arc(400, 530, 120, 0, Math.PI * 2)
+            ParamEllipse(ctx, 400, 530, 140, 120)
+            ctx.fillStyle = '#fff'
+            ctx.fill()
+            ctx.stroke()
+            ctx.closePath()
+            ctx.beginPath()
+            ctx.moveTo(290, 520)
+            ctx.bezierCurveTo(300, 650, 500, 650, 510, 520)
+            ctx.quadraticCurveTo(400, 510, 290, 520)
+            // ctx.arcTo(a, 530, 120)
+            // ctx.arc(400, 530, 100, Math.PI, Math.PI * 2)
+            ctx.stroke()
+            ctx.closePath()
+        }
+        let draw = () => {
+            face()
+            eye()
+            nose()
+            mouth()
+            arm()
+            foot()
+            body()
+            bag()
+            necklace()
+            waterMarker()
+        }
+        draw()
+        function ParamEllipse(context, x, y, a, b) {
+            //max是等于1除以长轴值a和b中的较大者
+            //i每次循环增加1/max，表示度数的增加
+            //这样可以使得每次循环所绘制的路径（弧线）接近1像素
+            var step = (a > b) ? 1 / a : 1 / b;
+            context.beginPath();
+            context.moveTo(x + a, y); //从椭圆的左端点开始绘制
+            for (var i = 0; i < 2 * Math.PI; i += step) {
+                //参数方程为x = a * cos(i), y = b * sin(i)，
+                //参数为i，表示度数（弧度）
+                context.lineTo(x + a * Math.cos(i), y + b * Math.sin(i));
+            }
+
+            context.stroke();
+            context.closePath();
+        };
+
+    </script>
+</body>
+
+</html>
